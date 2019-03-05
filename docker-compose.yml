@@ -1,0 +1,7 @@
+version: '2'
+services:
+  db:
+    build: ./docker-oracle-xe-11g
+    ports:
+      - 49161:1521
+    restart: always
