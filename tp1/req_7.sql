@@ -8,15 +8,21 @@ SELECT
 FROM
     GROUPECOURS
 WHERE
-    GROUPECOURS.SIGLE NOT IN (
-        SELECT DISTINCT(SIGLE) FROM GROUPECOURS WHERE CODEPROFESSEUR = (
-            SELECT
-                CODEPROFESSEUR
-            FROM
-                PROFESSEUR
-            WHERE
-                NOM = 'Galois' AND PRENOM = 'Evariste'
-            AND
-                ROWNUM = 1
-        )
-    );
+    GROUPECOURS.SIGLE
+NOT IN (
+  SELECT
+    DISTINCT(SIGLE)
+  FROM
+    GROUPECOURS
+  WHERE
+    CODEPROFESSEUR = (
+      SELECT
+          CODEPROFESSEUR
+      FROM
+          PROFESSEUR
+      WHERE
+          NOM = 'Galois' AND PRENOM = 'Evariste'
+      AND
+          ROWNUM = 1
+  )
+);
