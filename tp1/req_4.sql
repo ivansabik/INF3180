@@ -7,7 +7,8 @@ On cherche les codes permanents, noms et prénoms des étudiants inscrits aux co
 - ces étudiants sont considérés n’avoir pas abandonné le cours durant cette session
 */
 SELECT
-    DISTINCT(INSCRIPTION.CODEPERMANENT), ETUDIANT.NOM AS NOMETUDIANT, ETUDIANT.PRENOM AS PRENOMETUDIANT
+    INSCRIPTION.CODEPERMANENT, ETUDIANT.NOM AS NOMETUDIANT,
+    ETUDIANT.PRENOM AS PRENOMETUDIANT, INSCRIPTION.SIGLE
 FROM
     INSCRIPTION, GROUPECOURS, PROFESSEUR, ETUDIANT
 WHERE

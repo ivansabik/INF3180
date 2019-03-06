@@ -54,7 +54,7 @@ Retourner les sigles des cours non encore enseignés par le professeur dont le 
 
 #### Req 8
 
-Afficher la différence entre la moyenne des notes des cours donnés durant la session dont le code est 32203 et ceux de la session dont le code est 12204.
+Afficher la différence entre la moyenne des notes des cours donnés durant la session dont le code est 32003 et ceux de la session dont le code est 12204.
 
 #### Req 9
 
