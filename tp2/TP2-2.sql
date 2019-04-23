@@ -654,7 +654,6 @@ BEGIN
     END IF;
 exception
     WHEN no_data_found THEN
-        DBMS_OUTPUT.PUT_LINE('Pas des notes pour ' || codePermanentRequis);
         RETURN FALSE;
 END;
 /
@@ -675,12 +674,12 @@ BEGIN
     END IF;
 exception
     WHEN no_data_found THEN
-        DBMS_OUTPUT.PUT_LINE('Pas des notes pour ' || codePermanentRequis);
         RETURN FALSE;
 END;
 /
-create or replace PROCEDURE ETUDIANTPERFORMANCES (CODESESSION IN VARCHAR2) IS
-    junk BOOLEAN;
+create or replace PROCEDURE ETUDIANTPERFORMANCES (CODESESSION IN INTEGER) IS
+    bonne BOOLEAN;
+    mauvaise BOOLEAN;
     nombreResultats INTEGER;
 BEGIN
     DBMS_OUTPUT.PUT_LINE('Voici la liste des étudiants excellents de la session ' || CODESESSION);
@@ -688,8 +687,8 @@ BEGIN
     FOR etudiant IN (
         SELECT DISTINCT(codepermanent) as codePermanentRequis FROM inscription WHERE inscription.codesession = CODESESSION
     ) LOOP
-        junk := BonnePerformance(CODESESSION, etudiant.codePermanentRequis);
-        IF (junk = TRUE) THEN
+        bonne := BonnePerformance(CODESESSION, etudiant.codePermanentRequis);
+        IF (bonne = TRUE) THEN
             DBMS_OUTPUT.PUT_LINE('- ' || etudiant.codePermanentRequis);
             nombreResultats := nombreResultats +1;
         END IF;
@@ -698,8 +697,8 @@ BEGIN
     FOR etudiant IN (
         SELECT DISTINCT(codepermanent) as codePermanentRequis FROM inscription WHERE inscription.codesession = CODESESSION
     ) LOOP
-        junk := MauvaisePerformance(CODESESSION, etudiant.codePermanentRequis);
-        IF (junk = TRUE) THEN
+        mauvaise := MauvaisePerformance(CODESESSION, etudiant.codePermanentRequis);
+        IF (mauvaise = TRUE) THEN
             DBMS_OUTPUT.PUT_LINE('- ' || etudiant.codePermanentRequis);
             nombreResultats := nombreResultats +1;
         END IF;
@@ -709,4 +708,18 @@ BEGIN
     END IF;
 END;
 /
-EXECUTE ETUDIANTPERFORMANCES('32003');
+PROMPT Tests excersise 2;
+INSERT INTO sessionuqam VALUES (60001, '01/01/2018', '31/03/2019');
+INSERT INTO cours VALUES ('INF7120', 'Bases de données décisionnelles', 3);
+INSERT INTO groupecours VALUES ('INF7120', 10, 60001, 100, 'PASB1');
+INSERT INTO inscription VALUES('LAVP08087001', 'INF7120', 10, 60001, '22/08/2018', NULL, 80);
+INSERT INTO inscription VALUES('TREY09087501', 'INF7120', 10, 60001, '21/08/2018', NULL, 77);
+INSERT INTO inscription VALUES('EMEK10106501', 'INF7120', 10, 60001, '21/08/2018', NULL, 96);
+INSERT INTO inscription VALUES('MARA25087501', 'INF7120', 10, 60001, '20/08/2018', NULL, 99);
+INSERT INTO inscription VALUES('DEGE10027801', 'INF7120', 10, 60001, '20/08/2018', NULL, 20);
+INSERT INTO inscription VALUES('VANV05127201', 'INF7120', 10, 60001, '20/08/2018', NULL, 82);
+INSERT INTO inscription VALUES('TREJ18088001', 'INF7120', 10, 60001, '20/08/2018', NULL, 5);
+INSERT INTO inscription VALUES('TREL14027801', 'INF7120', 10, 60001, '20/08/2018', NULL, 84);
+EXECUTE ETUDIANTPERFORMANCES(60001);
+EXECUTE ETUDIANTPERFORMANCES(32003);
+ROLLBACK;
