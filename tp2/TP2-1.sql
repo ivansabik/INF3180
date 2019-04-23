@@ -637,8 +637,6 @@ FROM   etudiant;
 SELECT *
 FROM   inscription;
 
-
-
 CREATE OR REPLACE TRIGGER declencheur_c1
 BEFORE INSERT OR UPDATE ON sessionuqam
 FOR EACH row
@@ -647,12 +645,12 @@ BEGIN
     raise_application_error(-20000, ('Violation de contraintes de vérification C1: La date de fin de session ne devrait pas être inférieure à la date de début de session'));
   END IF;
 END;
-
+/
 PROMPT Test de violation de la contrainte C1;
 INSERT INTO sessionuqam VALUES('52001', '01/09/2019', '01/01/2000');
 UPDATE sessionuqam SET datefin = '01/01/2000' WHERE codesession ='32003';
 ROLLBACK;
-
+/
 CREATE OR REPLACE TRIGGER declencheur_c2
 BEFORE UPDATE ON inscription
 BEGIN
@@ -665,13 +663,12 @@ BEGIN
       raise_application_error(-20001, ('Violation de contraintes de vérification C2: On ne peut mettre à jour que la note et la dateAbandon'));
   END CASE;
 END;
-
-
+/
 PROMPT Test de violation de la contrainte C2;
 UPDATE inscription SET nogroupe = 20 WHERE codepermanent ='TREJ18088001';
 UPDATE inscription SET sigle = 'INF3180' WHERE codepermanent ='EMEK10106501';
 ROLLBACK;
-
+/
 CREATE OR REPLACE TRIGGER declencheur_c3
 BEFORE UPDATE ON inscription
 FOR EACH row
@@ -683,13 +680,13 @@ BEGIN
     raise_application_error(-20002, ('Violation de contraintes de vérification C3: La valeur de la note doit être supérieur à zéro.'));
   END IF;
 END;
-
+/
 PROMPT Test de violation de la contrainte C3;
 UPDATE inscription SET note = 10 WHERE codepermanent ='TREJ18088001';
 UPDATE inscription SET note = -2 WHERE codepermanent ='EMEK10106501';
 SELECT note FROM inscription  WHERE codepermanent ='EMEK10106501';
 ROLLBACK;
-
+/
 ALTER TABLE cours ADD frequence INTEGER;
 CREATE OR REPLACE TRIGGER declencheur_c4
 BEFORE INSERT ON cours
@@ -705,7 +702,7 @@ BEGIN
     END IF;
     :new.frequence := frequence + 1;
 END;
-
+/
 PROMPT Test de la colonne fréquence;
 INSERT INTO cours VALUES('INF5080', 'Patrons de conception génie logiciel', 3, NULL);
 INSERT INTO cours VALUES('INF9320', 'Bases de donnés NoSQL', 3, NULL);
